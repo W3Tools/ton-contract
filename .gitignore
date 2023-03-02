@@ -155,3 +155,6 @@ dist
 
 # TernJS port file
 .tern-port
+
+# funC build out
+*.cell
