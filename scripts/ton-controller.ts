@@ -4,7 +4,7 @@ import { KeyPair, mnemonicToWalletKey } from 'ton-crypto';
 import { TonClient, TonClientParameters } from 'ton/dist/client/TonClient';
 
 import dotenv from 'dotenv';
-import BasicContract from './base_fc';
+import BasicContract from './base_contract';
 dotenv.config({ path: '.env' });
 
 export class TonController {
