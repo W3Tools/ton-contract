@@ -53,6 +53,9 @@ export class TonController {
         }
     }
 
+    /**
+     * Calculate mnemonics to get user address and check this address is deployed
+     */
     async getWallet() {
         const mnemonic = process.env.MNEMONIC;
         if (!mnemonic || mnemonic == undefined) throw Error('Please Provide Mnemonic');

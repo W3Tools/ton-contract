@@ -3,16 +3,33 @@ import { Contract, Address, Cell, contractAddress, beginCell, ContractProvider, 
 export default class BasicContract implements Contract {
     constructor(readonly address: Address, readonly init?: { code: Cell; data: Cell }) {}
 
-    static createForDeploy(code: Cell, initialCounterValue: any): BasicContract {
-        const data = beginCell().storeUint(initialCounterValue, 64).endCell();
+    // static createForDeploy(code: Cell, initialCounterValue: any): BasicContract {
+    //     // const data = beginCell().storeUint(initialCounterValue, 64).endCell();
+    //     const workchain = 0; // deploy to workchain 0
+    //     const address = contractAddress(workchain, { code, data });
+    //     return new BasicContract(address, { code, data });
+    // }
+    static createForDeploy(code: Cell, data: Cell): BasicContract {
         const workchain = 0; // deploy to workchain 0
-        const address = contractAddress(workchain, { code, data });
+        //     let contractSource: ContractSource = {
+        //     initialCode: sourceCell,
+        //     initialData: dataCell,
+        //     workchain: 0,
+        //     type: '',
+        //     backup: () => '',
+        //     describe: () => 'nft'
+        // }
+        const address = contractAddress(workchain, { code: code, data: data });
         return new BasicContract(address, { code, data });
     }
 
-    async sendDeploy(contract: ContractProvider, sender: Sender) {
+    async sendDeploy(contract: ContractProvider, sender: Sender, msgCell?: Cell) {
         // Contracts need to be paid on an ongoing basis, otherwise there is a risk of deletion
-        await this.send(contract, sender, {});
+        let args: SendArgs = {
+            message: new Cell(),
+        };
+        if (msgCell) args['message'] = msgCell;
+        await this.send(contract, sender, args);
     }
 
     // send transaction
@@ -25,6 +42,7 @@ export default class BasicContract implements Contract {
         if (sendArgs.message) args['body'] = sendArgs.message;
 
         await contract.internal(sender, args);
+        // await contract.external(sendArgs.message);
     }
 
     // calling read only methods
@@ -38,5 +56,5 @@ export default class BasicContract implements Contract {
 
 interface SendArgs {
     bounce?: boolean;
-    message?: Cell | string;
+    message: Cell;
 }

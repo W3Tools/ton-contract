@@ -14,11 +14,11 @@ export class Step5 extends TonController {
         const counter = new Counter(address);
 
         const contract = this.ton.open(counter);
-        const result = await contract.get('counters');
-        console.log(`result: ${result.readBigNumber()}`);
+        const result = await contract.get('get_name');
+        console.log(`result: ${result.readString()}`);
 
-        const result_one = await contract.get('counter_one');
-        console.log(`result: ${result_one.readBigNumber()}`);
+        // const result_one = await contract.get('counter_one');
+        // console.log(`result: ${result_one.readBigNumber()}`);
     }
 }
 

@@ -1,7 +1,13 @@
 {
   "scripts": {
     "build-example": "npx func-js --boc output/contract.cell -C contracts stdlib.fc counter.fc",
-    "test": "npx ts-node --cwd scripts "
+    "build-test": "npx func-js --boc output/test.cell -C contracts stdlib.fc test.fc",
+    "test": "npx ts-node --cwd scripts ",
+    "build-collection": "npx func-js --boc output/collection.cell -C contracts stdlib.fc collection.fc",
+    "deploy-collection": "npx ts-node --cwd scripts deploy_collection.ts",
+    "build-nft": "npx func-js --boc output/nft.cell -C contracts stdlib.fc nft.fc",
+    "deploy-nft": "npx ts-node --cwd scripts deploy_nft.ts",
+    "nft": "npm run build-nft && npm run deploy-nft"
   },
   "dependencies": {
     "@orbs-network/ton-access": "^2.3.0",
@@ -10,6 +16,7 @@
     "dotenv": "^16.0.3",
     "fs": "^0.0.1-security",
     "ton": "^13.4.1",
+    "ton-compiler": "^2.3.0",
     "ton-core": "^0.48.0",
     "ton-crypto": "^3.2.0",
     "ts-node": "^10.9.1",

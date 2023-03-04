@@ -1,16 +1,15 @@
 import { Address, Cell, contractAddress, beginCell, ContractProvider, Sender } from 'ton-core';
 import BasicContract from './base_contract';
 
-export default class Counter extends BasicContract {
+export default class NFT extends BasicContract {
     constructor(readonly address: Address, readonly init?: { code: Cell; data: Cell }) {
         super(address, init);
     }
 
-    static createForDeploy(code: Cell, initialCounterValue: any): Counter {
-        const data = beginCell().storeUint(initialCounterValue, 64).endCell();
+    static createForDeploy(code: Cell, data: Cell): NFT {
         const workchain = 0; // deploy to workchain 0
         const address = contractAddress(workchain, { code, data });
-        return new Counter(address, { code, data });
+        return new NFT(address, { code, data });
     }
 
     // step6: send transaction
@@ -20,6 +19,11 @@ export default class Counter extends BasicContract {
             .storeUint(0, 64) // query id
             .endCell();
         await this.send(provider, sender, { message: messageBody });
+    }
+
+    async deploy(contract: ContractProvider, sender: Sender, msgCell: Cell) {
+        // Contracts need to be paid on an ongoing basis, otherwise there is a risk of deletion
+        await this.send(contract, sender, { message: msgCell });
     }
 }
 

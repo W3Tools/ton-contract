@@ -9,6 +9,7 @@ export class Step1 extends TonController {
     async main() {
         await this.getWallet();
         console.log(`workchain: ${this.wallet.address.workChain}`);
+        console.log(this.keyPair.publicKey.toString('hex'));
     }
 }
 
